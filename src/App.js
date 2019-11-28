@@ -1,16 +1,33 @@
 import React from "react";
-import { Container, Tabs, Tab } from "react-bootstrap";
+import {Container, Tabs, Tab} from "react-bootstrap";
 import "./style.css";
 import Tab11 from "./components/Tab1/Tab1_1.js";
 import Tab12 from "./components/Tab1/Tab1_2.js";
 import Tab2 from "./components/Tab2/Tab2.js";
 import Tab3 from "./components/Tab3/Tab3.js";
 import Tab4 from "./components/Tab4/Tab4.js";
+import Tab5 from "./components/Tab5/Tab5";
+import Tab6 from "./components/Tab6/Tab6";
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    let perArray = [], ER = [], eliminatedPerArray = [], eliminatedER = [];
+
+    for (let i = 0; i < 46; i++) {
+      perArray[i] = [];
+      eliminatedPerArray[i] = [];
+
+      for (let j = 0; j < 10; j++) {
+        perArray[i].push(Math.random().toFixed(2));
+        eliminatedPerArray[i].push(perArray[i][j] - Math.random() / 2 - 0.1);
+      }
+      ER.push((perArray[i].reduce((p, i) => p += +i, 0) / 10).toFixed(2));
+      eliminatedER.push((eliminatedPerArray[i].reduce((p, i) => p += +i, 0) / 10).toFixed(2));
+    }
+
     this.state = {
-      sourseRisk: {
+      sourceRisk: {
         disTechRisK: [
           "Наявні нереалістичні чи неоціненні функціональні характеристики ПЗ",
           "Наявні нереалістичні чи неоціненні характеристики якості ПЗ",
@@ -116,23 +133,35 @@ export default class App extends React.Component {
         "Повторне використання придатних компонент ПЗ, які були розроблені для інших програмних проектів",
         "Аналіз доцільності розроблення даного ПЗ"
       ],
-      ER: [],
+      ER,
       ERPER: [],
       priority: [],
       VRER: [],
-      indexMethods: []
+      indexMethods: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      perArray,
+      eliminatedPerArray,
+      eliminatedER,
+      loss:[]
     };
   }
 
   updateData = (nameData, data) => {
     let tmpData = [];
     tmpData = [...data];
-    this.setState({ [nameData]: tmpData }, () => {});
+    this.setState({[nameData]: tmpData}, () => {
+      console.log('perArray')
+    });
+  };
+
+  updateRootState = (obj) => {
+    this.setState(obj, ()=> console.log(this.state.eliminatedPerArray));
   };
 
   setER = tmpER => {
-    this.setState({ ER: tmpER }, () => {});
+    this.setState({ER: tmpER}, () => {
+    });
   };
+
   render() {
     return (
       <Container fluid>
@@ -140,27 +169,28 @@ export default class App extends React.Component {
           <Tab eventKey="Tab1" title="Ідентифікація ризиків розроблення ПЗ">
             <Tabs defaultActiveKey="Tab1_1" className="tabs">
               <Tab eventKey="Tab1_1" title="Джерела появи ризиків">
-                <Tab11 data={this.state} />
+                <Tab11 data={this.state}/>
               </Tab>
               <Tab eventKey="Tab1_2" title="Потенційні ризикові події">
-                <Tab12 data={this.state} />
+                <Tab12 data={this.state}/>
               </Tab>
             </Tabs>
           </Tab>
           <Tab eventKey="Tab2" title="Аналіз ризиків розроблення ПЗ">
-            <Tab2 data={this.state} setER={this.setER} />
+            <Tab2 data={this.state} updateData={this.updateData} setER={this.setER}
+                  updateRootState={this.updateRootState}/>
           </Tab>
           <Tab eventKey="Tab3" title="Величина ризиків">
-            <Tab3 data={this.state} updateData={this.updateData} />
+            <Tab3 data={this.state} updateData={this.updateData} updateRootState={this.updateRootState}/>
           </Tab>
           <Tab eventKey="Tab4" title="Усунення ризиків">
-            <Tab4 data={this.state} updateData={this.updateData} />
+            <Tab4 data={this.state} updateData={this.updateData}/>
           </Tab>
-          <Tab eventKey="Tab5" title="Моніторинг ризиківі">
-            <div>5</div>
+          <Tab eventKey="Tab5" title="Моніторинг ризиків">
+            <Tab5 data={this.state} updateData={this.updateData} setER={this.setER} updateRootState={this.updateRootState}/>
           </Tab>
           <Tab eventKey="Tab6" title="Результуюча величина ризику">
-            <div>6</div>
+            <Tab6 data={this.state} updateData={this.updateData}/>
           </Tab>
         </Tabs>
       </Container>

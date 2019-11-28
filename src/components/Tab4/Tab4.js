@@ -1,7 +1,6 @@
 import React from "react";
-import { Container, Row, Col, ListGroup, Button, Table } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import Tr from "./tr";
-import { tsModuleBlock } from "@babel/types";
 export default class Analiz extends React.Component {
   constructor(props) {
     super(props);

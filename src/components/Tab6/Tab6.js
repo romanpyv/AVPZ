@@ -1,6 +1,6 @@
 import React from "react";
 import {Container, Row, Col, ListGroup, Table} from "react-bootstrap";
-import Tr from "./tr";
+import Tr from "../Tab3/tr";
 
 export default class Analiz extends React.Component {
   constructor(props) {
@@ -21,35 +21,27 @@ export default class Analiz extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.data.ER !== this.props.data.ER) {
       let tmp2 = [...this.state.disData];
-      let loss= []
       let fatherMass;
       let tmpMinVrer;
       let tmpMaxVrer;
       let step;
-      fatherMass = this.props.data.ER;
+      fatherMass = this.props.data.eliminatedER;
 
+      console.log(this.props.data.eliminatedER);
 
-      tmp2.forEach((element, i) => {
-        if (i > 0) loss.push(element[2]);
-      });
-      this.props.updateRootState({loss});
       for (let i = 0; i < fatherMass.length; i++) {
         tmp2[i + 1][1] = fatherMass[i];
       }
 
       for (let i = 1; i < tmp2.length; i++) {
-        tmp2[i][3] = (tmp2[i][1] * tmp2[i][2]).toFixed(2);
+        tmp2[i][3] = +(tmp2[i][1] * tmp2[i][2]).toFixed(2);
       }
 
       tmpMinVrer = +Math.min(...tmp2.slice(1).map(i => +i[3])).toFixed(2);
       tmpMaxVrer = +Math.max(...tmp2.slice(1).map(i => +i[3])).toFixed(2);
       step = (tmpMaxVrer - tmpMinVrer) / 3;
 
-      this.changeVRER("minVR", tmpMinVrer);
-      this.changeVRER("maxVR", tmpMaxVrer);
-
       for (let i = 1; i < tmp2.length; i++) {
-        // console.log(tmp2[i][3]);
         if (tmp2[i][3] >= tmpMinVrer && tmp2[i][3] < tmpMinVrer + step) {
           tmp2[i][4] = 'Низький';
         }
@@ -61,6 +53,9 @@ export default class Analiz extends React.Component {
         }
       }
 
+
+      this.changeVRER("minVR", tmpMinVrer);
+      this.changeVRER("maxVR", tmpMaxVrer);
       this.setState({disData: tmp2, massER: fatherMass});
     }
   }
@@ -96,7 +91,7 @@ export default class Analiz extends React.Component {
   //Ініціалізація всього
   componentDidMount() {
     let tmp2 = [];
-
+  console.log(this.props.data.loss);
     tmp2.push(["Ризикові події", "ER", "Збитки", "VRER", "Пріоритет"]);
     this.props.data.eventRisk.disTechRisK.map(el => tmp2.push([el]));
     this.props.data.eventRisk.disValueRisK.map(el => tmp2.push([el]));

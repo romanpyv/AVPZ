@@ -6,7 +6,7 @@ export default class Tab1_2 extends React.Component {
     super(props);
     this.state = {
       techRisk: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      valuRisk: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      valueRisk: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       planRisk: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       realizeRisk: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       disTechRisK: this.props.data.eventRisk.disTechRisK,
@@ -15,14 +15,25 @@ export default class Tab1_2 extends React.Component {
       disRealizeRisK: this.props.data.eventRisk.disRealizeRisK
     };
   }
-  addToArray = (chek, arrType) => {
+  addToArray = (check, arrType) => {
     const tmp = this.state[arrType];
-    tmp[chek] = tmp[chek] ? 0 : 1;
+    tmp[check] = tmp[check] ? 0 : 1;
     this.setState({ [arrType]: tmp });
-    alert(this.state[arrType]);
   };
   calculate = () => {
-    alert("Calculate");
+    console.log(this.state);
+
+    let t = this.state.techRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 46;
+    let v = this.state.valueRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 46;
+    let p = this.state.planRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 46;
+    let r = this.state.realizeRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 46;
+
+    alert(`
+    Технічні ризики: ${(t*100).toFixed(2)}
+    Вартісні ризики: ${(v*100).toFixed(2)}
+    Планові ризики: ${(p*100).toFixed(2)}
+    Управлінські ризики: ${(r*100).toFixed(2)}
+    Загальні ризики: ${((t + v + p + r) * 100).toFixed(2)}`);
   };
   render() {
     return (
@@ -49,7 +60,7 @@ export default class Tab1_2 extends React.Component {
                 <CardsInfo
                   title="Вартісні ризикові події"
                   data={this.state.disValueRisK}
-                  riskType="valuRisk"
+                  riskType="valueRisk"
                   add={this.addToArray}
                 />
               </Col>

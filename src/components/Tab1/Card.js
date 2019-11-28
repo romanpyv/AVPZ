@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Card, Form } from "react-bootstrap";
 
 const CardInfo = ({ title, data, add, riskType }) => (
   <Card>
@@ -13,7 +13,7 @@ const CardInfo = ({ title, data, add, riskType }) => (
               onChange={() => {
                 add(i, riskType);
               }}
-            ></Form.Check>
+            />
           ))}
         </Form>
       </Card.Text>

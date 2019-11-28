@@ -1,33 +1,47 @@
 import React from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import {Container, Row, Col, Card, Button} from "react-bootstrap";
 import CardsInfo from "./Card";
+
 export default class Tab1_1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       techRisk: [0, 0, 0, 0, 0, 0, 0],
-      valuRisk: [0, 0, 0],
+      valueRisk: [0, 0, 0],
       planRisk: [0, 0, 0],
       realizeRisk: [0, 0, 0, 0, 0],
-      disTechRisK: this.props.data.sourseRisk.disTechRisK,
-      disValueRisK: this.props.data.sourseRisk.disValueRisK,
-      disPlanRisK: this.props.data.sourseRisk.disPlanRisK,
-      disRealizeRisK: this.props.data.sourseRisk.disRealizeRisK
+      disTechRisK: this.props.data.sourceRisk.disTechRisK,
+      disValueRisK: this.props.data.sourceRisk.disValueRisK,
+      disPlanRisK: this.props.data.sourceRisk.disPlanRisK,
+      disRealizeRisK: this.props.data.sourceRisk.disRealizeRisK
     };
   }
-  addToArray = (chek, arrType) => {
+
+  addToArray = (check, arrType) => {
     const tmp = this.state[arrType];
-    tmp[chek] = tmp[chek] ? 0 : 1;
-    this.setState({ [arrType]: tmp });
-    alert(this.state[arrType]);
+    tmp[check] = tmp[check] ? 0 : 1;
+    this.setState({[arrType]: tmp});
   };
   calculate = () => {
-    console.log(this);
+    console.log(this.state);
+
+    let t = this.state.techRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 18;
+    let v = this.state.valueRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 18;
+    let p = this.state.planRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 18;
+    let r = this.state.realizeRisk.reduce(((previousValue, currentValue) => previousValue += currentValue), 0) / 18;
+
+    alert(`
+    Технічні ризики: ${(t*100).toFixed(2)}
+    Вартісні ризики: ${(v*100).toFixed(2)}
+    Планові ризики: ${(p*100).toFixed(2)}
+    Управлінські ризики: ${(r*100).toFixed(2)}
+    Загальні ризики: ${((t + v + p + r) * 100).toFixed(2)}`);
   };
+
   render() {
     return (
       <Container fluid className="unselectable">
-        <br />
+        <br/>
         <Card>
           <Card.Body>
             <Card.Title>
@@ -49,12 +63,12 @@ export default class Tab1_1 extends React.Component {
                 <CardsInfo
                   title="Вартісні ризики"
                   data={this.state.disValueRisK}
-                  riskType="valuRisk"
+                  riskType="valueRisk"
                   add={this.addToArray}
                 />
               </Col>
             </Row>
-            <br />
+            <br/>
             <Row>
               <Col md="6">
                 <CardsInfo
@@ -73,7 +87,7 @@ export default class Tab1_1 extends React.Component {
                 />
               </Col>
             </Row>
-            <br />
+            <br/>
             <Button
               block
               onClick={() => {
